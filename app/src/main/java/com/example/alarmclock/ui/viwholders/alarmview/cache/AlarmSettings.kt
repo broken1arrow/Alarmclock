@@ -8,7 +8,6 @@ import org.threeten.bp.ZoneId
 
 
 data class AlarmSettings(
-    
     var id: Int = 0,
     var date: LocalDate? = null,
     var time: LocalTime = LocalTime.now(ZoneId.of("UTC")),
