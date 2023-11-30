@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import com.example.alarmclock.data.AlarmsUtility
 import com.example.alarmclock.ui.viwholders.alarmview.AlarmReceiver
 import com.example.alarmclock.ui.viwholders.alarmview.cache.AlarmSettings
@@ -44,15 +45,22 @@ class RegisterAlarm(private val context: Context) {
             val scheduledDateTime = LocalDateTime.of(currentDay, alarm.time)
 
             calendar.timeInMillis =
-               scheduledDateTime.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli()
-
+                scheduledDateTime.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli()
+            //
             if (isMatchingDay) {     // Schedule a repeating alarm on the specified days of the week
-                alarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.timeInMillis,
-                    AlarmManager.INTERVAL_DAY * 7,  // Repeat every week
-                    alarmIntent
-                )
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms() && alarmManager.canScheduleExactAlarms()) {
+                    alarmManager.setAlarmClock(
+                        AlarmManager.AlarmClockInfo(calendar.timeInMillis, alarmIntent),
+                        alarmIntent
+                    )
+                } else {
+                    alarmManager.setRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        AlarmManager.INTERVAL_DAY * 7,  // Repeat every week
+                        alarmIntent
+                    )
+                }
             } else {
                 alarmManager.set(
                     AlarmManager.RTC_WAKEUP,

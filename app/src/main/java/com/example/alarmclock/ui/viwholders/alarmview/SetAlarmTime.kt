@@ -43,7 +43,6 @@ class SetAlarmTime(private val view: TextView, alarmViewMenu: AlarmViewMenu) {
     }
 
     fun showPopup(anchorView: View) {
-        // Show the popup at the specified location relative to the anchor view
         popupWindow.showAtLocation(anchorView, Gravity.CENTER, 0, 0)
     }
 
@@ -54,8 +53,6 @@ class SetAlarmTime(private val view: TextView, alarmViewMenu: AlarmViewMenu) {
     fun onIntegration(alarmSettings: AlarmSettings) {
         var minute = -1
         var hour = -1
-       // binding.setHour.text = Editable.Factory.getInstance().newEditable("")
-       // binding.setMinute.text = Editable.Factory.getInstance().newEditable("")
         binding.setHour.setSelection(0)
         binding.setMinute.setSelection(0)
 
@@ -70,9 +67,6 @@ class SetAlarmTime(private val view: TextView, alarmViewMenu: AlarmViewMenu) {
                         binding.setHour.setSelection(text.length - 1)
                         hoursChecked = textSub.toInt()
 
-                    } else {
-                        // Text is valid, proceed with your logic
-                        println("Valid minutes: $hours")
                     }
                     hour = hoursChecked
                 } else {
@@ -90,9 +84,6 @@ class SetAlarmTime(private val view: TextView, alarmViewMenu: AlarmViewMenu) {
                         binding.setMinute.setText(textSub)
                         binding.setMinute.setSelection(text.length - 1)
                         minutesChecked = textSub.toInt()
-                    } else {
-                        // Text is valid, proceed with your logic
-                        println("Valid minutes: $minutes")
                     }
                     minute = minutesChecked
                 } else {
@@ -103,11 +94,18 @@ class SetAlarmTime(private val view: TextView, alarmViewMenu: AlarmViewMenu) {
 
         binding.setTime.setOnClickListener {
             if (hour >= 0 && minute >= 0) {
+                var hourFormatted = hour.toString()
+                var minuteFormatted = minute.toString()
+                if (hour < 10)
+                    hourFormatted = "0$hourFormatted"
+                if (minute < 10)
+                    minuteFormatted = "0$minuteFormatted"
+
                 alarmSettings.time = LocalTime.of(hour, minute)
                 view.text = view.context.getString(
                     R.string.alarm_time_with_placeholders,
-                    alarmSettings.time.hour,
-                    alarmSettings.time.minute
+                    hourFormatted,
+                    minuteFormatted
                 )
             }
             closePopup()

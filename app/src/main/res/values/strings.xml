@@ -44,7 +44,7 @@
     <string name="set_minute">set minutes</string>
     <string name="set_selected_alarm_time">ok</string>
     <string name="cancel_selected_alarm_time">cancel</string>
-    <string name="alarm_time_with_placeholders">%1$d:%2$d</string>
+    <string name="alarm_time_with_placeholders">%1$s:%2$s</string>
     <string name="title_activity_alarm_snozze">alarm_snozze</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>

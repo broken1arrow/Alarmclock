@@ -44,11 +44,11 @@ class AlarmReceiver : BroadcastReceiver() {
 
         // Create the notification
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setContentTitle("Alarm Notification")
             .setContentText("Time to snooze!")
-            .addAction(android.R.drawable.btn_star, "Snooze", snoozePendingAction)
-            .addAction(android.R.drawable.btn_minus, "Turn Off", turnOffPendingAction)
+            .addAction(android.R.drawable.ic_lock_silent_mode, "Snooze", snoozePendingAction)
+            .addAction(android.R.drawable.ic_delete, "Turn Off", turnOffPendingAction)
             //.setContentIntent(pendingIntent)
             .setAutoCancel(true) // Automatically remove the notification when clicked
 
