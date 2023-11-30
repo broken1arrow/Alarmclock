@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="text_default">#FFFFFF</color>
+    <color name="background">#1A152C</color>
+    <color name="background_popup_window">#2E254F</color>
+
+    <color name="button_base_default">#5A48A8</color>
+    <color name="button_pressed_default">#441475</color>
+    <color name="button_focused_default">#0D737373</color>
+
+
+    <color name="switch_thump">#441475</color>
+    <color name="switch_track_true">#5A48A8</color>
+    <color name="switch_track_false">#3A3742</color>
+
+    <color name="toolbar_background">#2A0D4C</color>
+
+
+    <color name="day_outer_circle">#22184C</color>
+    <color name="day_background_circle">@color/background</color>
+
+    <color name="select_time_not_focus">#5A48A8</color>
+    <color name="select_time_focus">#22184C</color>
+</resources>

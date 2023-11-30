@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.PopupMenuStyle" parent="@style/Widget.AppCompat.PopupMenu">
+        <!-- Customize the appearance of the menu items -->
+        <item name="android:textAppearance">@style/MenuItemTextStyle</item>
+        <!-- Customize the item divider line (optional)
+        <item name="android:itemBackground">@drawable/popup_item_background</item> -->
+
+        <!-- Customize the behavior of the menu -->
+        <item name="android:overlapAnchor">true</item>
+        <item name="android:dropDownHorizontalOffset">-50dp</item>
+        <item name="android:dropDownVerticalOffset">4dp</item>
+    </style>
+
+    <style name="MenuItemTextStyle" parent="@style/TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.Material3.Button">
+        <item name="colorControlActivated">@color/button_base_default</item>
+        <item name="colorControlNormal">@color/button_color_state</item>
+        <item name="colorControlHighlight">@color/md_theme_light_shadow</item>
+        <item name="android:background">@drawable/button_shape</item>
+        <item name="backgroundTint">@color/button_color_state</item>
+    </style>
+
+    <style name="background_item_alarm">
+        <item name="android:background">@drawable/background_round_corners</item>
+        <item name="android:backgroundTint">@color/background</item>
+    </style>
+
+    <style name="background_button_for_day" parent="Widget.Material3.TabLayout">
+        <item name="background">@color/background</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:backgroundTint">@color/background</item>
+        <item name="backgroundTint">@color/background</item>
+    </style>
+
+    <style name="switch_item_alarm" parent="android:Widget.Material.CompoundButton.Switch">
+        <item name="android:backgroundTint">@color/background</item>
+        <item name="android:thumb">@drawable/custom_switch_thumb</item>
+        <item name="android:track">@drawable/custom_switch_track</item>
+        <item name="android:thumbTint">@color/switch_track_thumb_color_state</item>
+        <item name="android:trackTint">@color/switch_track_color_state</item>
+    </style>
+
+    <style name="toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/toolbar_background</item>
+    </style>
+
+    <style name="navigation_bottom" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemActiveIndicatorStyle">@style/navigation_bottom_ActiveIndicator</item>
+    </style>
+
+    <style name="navigation_bottom_ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/button_base_default</item>
+    </style>
+
+    <style name="ImageButtonStyle">
+        <item name="android:tint">@color/toolbar_background</item>
+    </style>
+
+    <style name="PopupAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="calendar_alarm_date" parent="@android:style/Widget.Material.Light.CalendarView">
+        <item name="android:selectedWeekBackgroundColor">#FFFFFF</item>
+        <item name="android:focusedMonthDateColor">#FFFFFF</item>
+        <item name="android:weekNumberColor">#8E8E8E</item>
+       <!-- <item name="android:daySelectorColor">#FF8F00</item>-->
+        <item name="android:colorAccent">@color/md_theme_light_tertiary</item>
+        <item name="colorAccent">#0045F8</item>
+        <item name="android:colorControlActivated">#0045F8</item>
+        <item name="android:weekDayTextAppearance">@style/WeekdayTextAppearance</item>
+        <item name="android:dateTextAppearance">@style/DateTextAppearance</item>
+    </style>
+
+    <style name="WeekdayTextAppearance" parent="@android:style/TextAppearance.Small">
+        <item name="android:textColor">#FF9800</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="DateTextAppearance" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="add_alarm_button" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">10sp</item>
+    </style>
+
+
+    <style name="time_format" parent="android:Widget.Material.EditText">
+        <item name="android:textColor">@color/text_default</item>
+        <item name="android:background">@drawable/set_alarm_background_round_corners</item>
+
+        <item name="android:textSize">@dimen/set_alarm_size</item>
+        <item name="android:gravity">center</item>
+        <item name="colorControlNormal">@color/background</item> <!-- Color of the underline -->
+        <item name="colorControlActivated">#00FF00</item> <!-- Color when selected -->
+    </style>
+
+    <style name="MyTimePicker" parent="android:Widget.Material.Light.TimePicker">
+        <item name="android:timePickerMode">clock</item>
+        <item name="android:headerBackground">#534444</item>
+        <item name="android:numbersTextColor">#534444</item>
+        <item name="android:numbersInnerTextColor">#534444</item>
+        <item name="android:numbersSelectorColor">#534444</item>
+        <item name="android:numbersBackgroundColor">#534444</item>
+        <item name="android:amPmTextColor">?android:attr/textColorSecondary</item>
+    </style>
+
+
+</resources>

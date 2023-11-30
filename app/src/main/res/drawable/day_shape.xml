@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Shadow -->
+    <item>
+        <shape android:shape="oval">
+            <!-- Set the desired background color -->
+            <solid android:color="#40000000" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+    <!-- Background Shape -->
+    <item android:left="3dp" android:top="3dp" android:right="3dp" android:bottom="3dp">
+        <shape android:shape="oval">
+            <!-- Set the desired background color -->
+            <solid android:color="@color/background" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <!-- Text Overlay -->
+    <item android:gravity="center">
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/empty_day"
+            android:tint="@android:color/background_dark" />
+    </item>
+
+</layer-list>

@@ -1,0 +1,30 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Outer circle with shadow -->
+    <item>
+        <shape
+            android:shape="oval">
+            <solid
+                android:color="@color/day_outer_circle"  />
+            <size
+                android:width="48dp"
+                android:height="48dp" />
+        </shape>
+    </item>
+
+    <!-- Background circle -->
+    <item android:top="@dimen/day_background_circle" android:bottom="@dimen/day_background_circle" android:left="@dimen/day_background_circle" android:right="@dimen/day_background_circle">
+        <shape
+            android:shape="oval">
+            <solid
+                android:color="@color/day_background_circle"/>
+            <size
+                android:width="40dp"
+                android:height="40dp" />
+        </shape>
+    </item>
+
+</layer-list>
+
+
+

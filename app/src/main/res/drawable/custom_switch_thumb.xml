@@ -1,0 +1,12 @@
+<!-- custom_switch_thumb.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background shape for the thumb -->
+    <item>
+        <shape android:shape="oval">
+            <size android:width="15dp" android:height="15dp" />
+        </shape>
+    </item>
+    <!-- Icon or content for the thumb (centered) -->
+    <item android:drawable="@drawable/switch_thumb_orange">
+    </item>
+</layer-list>

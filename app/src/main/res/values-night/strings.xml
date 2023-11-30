@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="set_date_for_alarm">set date</string>
+    <string name="expand_alarm_menu">expand alarm menu</string>
+    <string name="day_number_1">day number 1</string>
+    <string name="day_number_2">day number 2</string>
+    <string name="day_number_3">day number 3</string>
+    <string name="day_number_4">day number 4</string>
+    <string name="day_number_5">day number 5</string>
+    <string name="day_number_6">day number 6</string>
+    <string name="day_number_7">day number 7</string>
+    <string name="no_alarm_scheduled">no alarm scheduled</string>
+    <string name="set_alarm_sound_text">Set alarm sound</string>
+    <string name="remove">Remove</string>
+    <string name="set_vibration">Set vibration</string>
+    <string name="toogle_extend">Toggle extend mode.</string>
+
+    <string name="monday">monday</string>
+    <string name="mo">mo</string>
+    <string name="tuesday">tuesday</string>
+    <string name="tu">tu</string>
+    <string name="wednesday">wednesday</string>
+    <string name="we">we</string>
+    <string name="thursday">thursday</string>
+    <string name="th">th</string>
+    <string name="friday">friday</string>
+    <string name="fr">fr</string>
+    <string name="saturday">saturday</string>
+    <string name="sa">sa</string>
+    <string name="sunday">sunday</string>
+    <string name="su">su</string>
+
+    <string name="set_date">Apply</string>
+    <string name="unset_date">Cancel</string>
+    <string name="add_alarm">dd alarm</string>
+    <string name="alarm_time_spaze">:</string>
+    <string name="select_time">Select time</string>
+    <string name="set_time_hour">set hour</string>
+    <string name="set_minute">set minutes</string>
+    <string name="set_selected_alarm_time">ok</string>
+    <string name="cancel_selected_alarm_time">cancel</string>
+    <string name="alarm_time_with_placeholders">%1$d:%2$d</string>
+
+</resources>

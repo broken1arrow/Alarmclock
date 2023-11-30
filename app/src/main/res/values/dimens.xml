@@ -1,0 +1,9 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="day_background_circle">2.5dp</dimen>
+    <dimen name="set_alarm_time_text_Size">40sp</dimen>
+    <dimen name="set_alarm_size">40sp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+</resources>

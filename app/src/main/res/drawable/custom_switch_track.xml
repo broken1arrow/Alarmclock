@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/switch_widget">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/switch_track_color_state" /> <!-- Change the color here for the on state -->
+            <corners android:radius="12dp" /> <!-- Change the radius here -->
+            <size android:width="25dp" android:height="25dp" />
+        </shape>
+    </item>
+</layer-list>
+
