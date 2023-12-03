@@ -1,13 +1,10 @@
 package com.example.alarmclock.ui.viwholders.alarmview.utility
 
 import android.content.Context
-import android.content.Context.VIBRATOR_SERVICE
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TableRow
+import androidx.core.content.ContextCompat.getString
 import com.example.alarmclock.R
 import com.example.alarmclock.ui.viwholders.alarmview.cache.AlarmSettings
 import com.example.alarmclock.databinding.AlarmMenuBinding
@@ -18,6 +15,7 @@ import com.example.alarmclock.ui.viwholders.alarmview.SetAlarmTime
 import com.example.alarmclock.utility.CustomImageButton
 import com.example.alarmclock.utility.Days
 import com.example.alarmclock.utility.RegisterAlarm
+import com.example.alarmclock.utility.Shake
 
 
 class OnAlarmClick(
@@ -44,10 +42,10 @@ class OnAlarmClick(
         menuBinding.expandedView.visibility =
             if (alarmSettings.expand != Mode.NORMAL) View.VISIBLE else View.GONE
         menuBinding.toggleExtendedView.setOnClickListener {
-            if (alarmSettings.expand == Mode.EXTENDED)
-                menuBinding.toggleExtendedView.setImageResource(R.drawable.ic_down_arrow)
-            else
-                menuBinding.toggleExtendedView.setImageResource(R.drawable.ic_up_arrow)
+            if (alarmSettings.expand == Mode.EXTENDED) menuBinding.toggleExtendedView.setImageResource(
+                R.drawable.ic_down_arrow
+            )
+            else menuBinding.toggleExtendedView.setImageResource(R.drawable.ic_up_arrow)
 
             alarmSettings.expand =
                 if (alarmSettings.expand == Mode.NORMAL) Mode.EXTENDED else Mode.NORMAL
@@ -56,6 +54,11 @@ class OnAlarmClick(
     }
 
     fun onSetTimeClick() {
+        menuBinding.alarmTime.text =
+            if (alarmSettings.time != null)
+                alarmSettings.time!!.hour.toString() + ":" + alarmSettings.time!!.minute.toString()
+            else getString(menuBinding.alarmTime.context, R.string.time_default)
+
         menuBinding.alarmTime.setOnClickListener {
             val setAlarmTime = SetAlarmTime(menuBinding.alarmTime, alarmViewMenu)
             menuBinding
@@ -77,16 +80,15 @@ class OnAlarmClick(
 
         val dayList = menuBinding.daysList
         val buttonParams = TableRow.LayoutParams(
-            TableRow.LayoutParams.WRAP_CONTENT,
-            TableRow.LayoutParams.WRAP_CONTENT
+            TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT
         )
         buttonParams.weight = 1F
         val tableRow = TableRow(dayList.context)
-
         for (i in Days.values()) {
             val (button, imageButton) = createImageButton(dayList, i, buttonParams, tableRow)
-            if (alarmSettings.days.contains(i))
+            if (alarmSettings.days.contains(i)) {
                 button.setImageResource(R.drawable.empty_day_pressed)
+            }
 
             button.setOnClickListener {
                 imageButton.animateOnClick(it)
@@ -99,15 +101,23 @@ class OnAlarmClick(
                     button.setImageResource(R.drawable.empty_day)
                     alarmSettings.days.remove(day)
                 }
+                setDays(dayList.context)
             }
         }
+        setDays(dayList.context)
+
         dayList.addView(tableRow)
     }
 
     fun onSetDateClick() {
         val dateForAlarm = menuBinding.setDateForAlarm
+        if (alarmSettings.date != null) {
+            val formatter = org.threeten.bp.format.DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
+            val formattedDate = alarmSettings.date!!.format(formatter)
+            dateForAlarm.text = formattedDate
+        }
         dateForAlarm.setOnClickListener {
-            val calender = Calender(dateForAlarm.context, alarmViewMenu)
+            val calender = Calender(dateForAlarm, alarmViewMenu)
             calender.showPopup(it)
             calender.onIntegration(alarmSettings)
         }
@@ -115,7 +125,7 @@ class OnAlarmClick(
 
     fun onSetVibrationClick() {
         menuBinding.setAlarmVibration.setOnClickListener {
-            shakeItBaby(it.context)
+            Shake.shake(it.context)
             alarmSettings.vibrate = !alarmSettings.vibrate
 
             //menuBinding.setAlarmVibration.context
@@ -128,24 +138,16 @@ class OnAlarmClick(
         }
     }
 
-    fun onSetAddClick() {
-        alarmViewMenu.homeFragment().binding.addAlarm.setOnClickListener {
-            alarmViewMenu.addItem(position)
-        }
-    }
-
     fun onSetDeleteClick() {
         val removeAlarm = menuBinding.removeAlarm
         removeAlarm.setOnClickListener {
+
             alarmViewMenu.removeItem(position)
         }
     }
 
     private fun createImageButton(
-        dayList: TableRow,
-        day: Days,
-        buttonParams: TableRow.LayoutParams,
-        tableRow: TableRow
+        dayList: TableRow, day: Days, buttonParams: TableRow.LayoutParams, tableRow: TableRow
     ): Pair<ImageButton, CustomImageButton> {
         val button = ImageButton(dayList.context)
         button.id = day.ordinal
@@ -154,23 +156,26 @@ class OnAlarmClick(
 
         val imageButton = CustomImageButton(dayList.context, button)
         val frameLayout = imageButton.textOnButton(
-            buttonParams,
-            dayList.context.getString(day.firstLetters)
+            buttonParams, dayList.context.getString(day.firstLetters)
         )
         tableRow.addView(frameLayout)
         return Pair(button, imageButton)
     }
 
-    private fun shakeItBaby(context: Context) {
-        if (Build.VERSION.SDK_INT >= 26) {
-            (context.getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(
-                VibrationEffect.createOneShot(
-                    150,
-                    VibrationEffect.DEFAULT_AMPLITUDE
-                )
-            )
-        } else {
-            (context.getSystemService(VIBRATOR_SERVICE) as Vibrator).vibrate(150)
+    private fun setDays(context: Context) {
+        val builder = StringBuilder()
+        val listOfDays = alarmSettings.days
+        for (day in listOfDays) {
+            builder.append(context.getString(day.day))
+            if (listOfDays.size > 1)
+                builder.append(", ")
+        }
+        if (listOfDays.size > 1)
+            builder.setLength(builder.length - 2)
+        if (builder.isNotEmpty())
+            menuBinding.scheduledAlarms.text = builder
+        else {
+            menuBinding.scheduledAlarms.text = builder.append(context.getString(R.string.no_alarm_scheduled))
         }
     }
 }

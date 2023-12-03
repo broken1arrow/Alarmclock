@@ -10,7 +10,7 @@ import com.example.alarmclock.ui.viwholders.Holder
 import com.example.alarmclock.ui.viwholders.alarmview.utility.OnAlarmClick
 
 class AlarmViewMenu(private val alarmAdapter: AlarmAdapter) :
-    Holder<AlarmViewMenu.SubtractedView>() {
+    Holder<AlarmViewMenu.ViewBinding>() {
 
     private var parentView: ViewGroup? = null
 
@@ -19,10 +19,10 @@ class AlarmViewMenu(private val alarmAdapter: AlarmAdapter) :
         val binding = AlarmMenuBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
-        return SubtractedView(binding)
+        return ViewBinding(binding)
     }
 
-    override fun onBindViewHolder(holder: SubtractedView, position: Int) {
+    override fun onBindViewHolder(holder: ViewBinding, position: Int) {
         val instance = this
         with(holder.binding) {
             OnAlarmClick(this, instance, alarmAdapter.alarms[position], position)
@@ -40,17 +40,12 @@ class AlarmViewMenu(private val alarmAdapter: AlarmAdapter) :
     }
 
     fun removeItem(position: Int) {
-        alarmAdapter.viewModel.removeAlarm(AlarmSettings())
+        alarmAdapter.alarms.removeAt(position)
         alarmAdapter.save()
         alarmAdapter.sendUpdate(position)
     }
 
-    fun addItem(position: Int) {
-        alarmAdapter.viewModel.addAlarm(AlarmSettings())
-        alarmAdapter.save()
-        alarmAdapter.sendUpdate(position)
-    }
-    inner class SubtractedView(val binding: AlarmMenuBinding) :
+    inner class ViewBinding(val binding: AlarmMenuBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(position: Int) {
             onBindViewHolder(this, position)

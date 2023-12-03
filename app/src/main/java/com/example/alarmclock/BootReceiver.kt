@@ -17,6 +17,7 @@ import java.util.Calendar
 class BootReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        println("boot up the app " + intent.action )
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
             rescheduleAlarms(context)
         }
@@ -29,7 +30,7 @@ class BootReceiver : BroadcastReceiver() {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val currentDay = LocalDate.now(ZoneId.systemDefault())
-
+        println("boot up the app")
         alarms.forEach { alarm ->
             // Check if the current day matches any of the specified days for the alarm
             val isMatchingDay = containsDay(alarm, currentDay.dayOfWeek)

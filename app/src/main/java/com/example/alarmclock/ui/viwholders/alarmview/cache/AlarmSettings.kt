@@ -10,7 +10,7 @@ import org.threeten.bp.ZoneId
 data class AlarmSettings(
     var id: Int = 0,
     var date: LocalDate? = null,
-    var time: LocalTime = LocalTime.now(ZoneId.of("UTC")),
+    var time: LocalTime? = null,
     var alarmOn: Boolean = false,
     var days: MutableList< Days> = mutableListOf(),
     var vibrate: Boolean= false,

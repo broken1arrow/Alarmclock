@@ -21,12 +21,13 @@ class AlarmViewModel(app: Application) : AndroidViewModel(app) {
     val liveListOfSettings: LiveData<MutableList<AlarmSettings>> = liveData {
         val data = alarmsUtility.getAlarmsFromJson()
         var id = 0
-        for (statement in data)
-            statement.id = id++
+        for (alarm in data)
+            alarm.id = id++
         emit(data.toMutableList())
     }
 
     fun removeAlarm(alarm: AlarmSettings) {
+        println("remove " + alarmSetting.value)
         alarmSetting.value?.remove(alarm)
     }
 

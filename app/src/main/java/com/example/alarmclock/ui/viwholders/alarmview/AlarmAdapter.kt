@@ -11,12 +11,11 @@ class AlarmAdapter(
     val viewModel: AlarmViewModel,
     val homeFragment: HomeFragment
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    //private val  holder : Holder<AlarmViewMenu, AlarmViewMenu.SubtractedView>? = null
     private val alarmViewMenu: AlarmViewMenu = AlarmViewMenu(this)
     private var position = 0
 
     init {
-        onSetAddClick()
+        onAddClick()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -25,7 +24,7 @@ class AlarmAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is AlarmViewMenu.SubtractedView -> holder.bind(position)
+            is AlarmViewMenu.ViewBinding -> holder.bind(position)
         }
     }
 
@@ -43,7 +42,7 @@ class AlarmAdapter(
            return alarms.size
     }
 
-    fun onSetAddClick() {
+    fun onAddClick() {
         homeFragment.binding.addAlarm.setOnClickListener {
             alarms.add(AlarmSettings())
             save()

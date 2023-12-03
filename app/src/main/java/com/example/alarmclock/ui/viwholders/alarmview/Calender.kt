@@ -1,6 +1,5 @@
 package com.example.alarmclock.ui.viwholders.alarmview
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.util.Log
 import android.view.Gravity
@@ -15,13 +14,14 @@ import androidx.fragment.app.Fragment
 import com.example.alarmclock.R
 import com.example.alarmclock.ui.viwholders.alarmview.cache.AlarmSettings
 import com.example.alarmclock.databinding.CalenderPopupMenuBinding
+import com.google.android.material.button.MaterialButton
 import org.threeten.bp.LocalDate
 
-class Calender(private val context: Context, alarmViewMenu: AlarmViewMenu) {
+class Calender(private val button: MaterialButton,  alarmViewMenu: AlarmViewMenu) {
     private val fragment: Fragment = alarmViewMenu.homeFragment()
 
     val binding: CalenderPopupMenuBinding = CalenderPopupMenuBinding.inflate(
-        LayoutInflater.from(context),  fragment.requireView() as ViewGroup?, false
+        LayoutInflater.from(button.context),  fragment.requireView() as ViewGroup?, false
     )
 
     private val popupWindow: PopupWindow = PopupWindow(
@@ -35,7 +35,7 @@ class Calender(private val context: Context, alarmViewMenu: AlarmViewMenu) {
         val background = binding.calenderBackground
         background.setBackgroundResource(R.drawable.background_round_corners)
         background.backgroundTintList =
-            ColorStateList.valueOf(getColor(context, R.color.background_popup_window))
+            ColorStateList.valueOf(getColor(button.context, R.color.background_popup_window))
 
         // Set the background to null for a transparent background
         popupWindow.setBackgroundDrawable(null)
@@ -53,7 +53,7 @@ class Calender(private val context: Context, alarmViewMenu: AlarmViewMenu) {
     }
 
     fun onIntegration(alarmSettings: AlarmSettings){
-        var isTextChangeByCode = false
+        val isTextChangeByCode = false
         var date: LocalDate? = null
         binding.typeDateManually.doOnTextChanged { text, start, before, count ->
             date = formatDateFromString(isTextChangeByCode, text, date)
@@ -63,9 +63,13 @@ class Calender(private val context: Context, alarmViewMenu: AlarmViewMenu) {
             date = selectedDate
         }
         binding.setDate.setOnClickListener {
-            Log.e("date is not null", "" + date)
-            if (date != null)
+            if (date != null) {
                 alarmSettings.date = date as LocalDate
+                    val formatter = org.threeten.bp.format.DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
+                    val formattedDate = alarmSettings.date!!.format(formatter)
+                button.text = formattedDate
+            }
+            closePopup()
         }
         binding.cancelButtonDate.setOnClickListener{
             closePopup()

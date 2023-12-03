@@ -34,12 +34,12 @@ class RegisterAlarm(private val context: Context) {
 
         if (alarm.alarmOn && (isMatchingDay || (alarm.date != null && currentDay.isEqual(alarm.date)))) {
             val alarmIntent = Intent(context, AlarmReceiver::class.java).let { intent ->
+                intent.putExtra("ALARM_ID",alarm.id)
                 PendingIntent.getBroadcast(
                     context, alarm.id, intent,
                     PendingIntent.FLAG_IMMUTABLE
                 )
             }
-
             // Use the alarm's scheduled date and time
             val calendar = Calendar.getInstance()
             val scheduledDateTime = LocalDateTime.of(currentDay, alarm.time)
@@ -48,7 +48,7 @@ class RegisterAlarm(private val context: Context) {
                 scheduledDateTime.atZone(ZoneId.of("UTC")).toInstant().toEpochMilli()
             //
             if (isMatchingDay) {     // Schedule a repeating alarm on the specified days of the week
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms() && alarmManager.canScheduleExactAlarms()) {
+                if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.S) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && alarmManager.canScheduleExactAlarms())) {
                     alarmManager.setAlarmClock(
                         AlarmManager.AlarmClockInfo(calendar.timeInMillis, alarmIntent),
                         alarmIntent

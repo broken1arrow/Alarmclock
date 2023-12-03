@@ -33,19 +33,14 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val list = mutableListOf<AlarmSettings>()
-        list.add(AlarmSettings(1))
-        list.add(AlarmSettings(1))
-        list.add(AlarmSettings(1))
-        list.add(AlarmSettings(1))
 
         viewModel = activity?.run {
             ViewModelProvider(this)[AlarmViewModel::class.java]
         }
-        viewModel?.liveListOfSettings?.observe(viewLifecycleOwner) { statements ->
+        viewModel?.liveListOfSettings?.observe(viewLifecycleOwner) { alarmSettings ->
             val recyclerView = binding.recycle
             recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = AlarmAdapter(statements, viewModel!!, this)
+            recyclerView.adapter = AlarmAdapter(alarmSettings, viewModel!!, this)
         }
         /*
                 val recyclerView = binding.recycle
@@ -53,8 +48,18 @@ class HomeFragment : Fragment() {
                 recyclerView.adapter = AlarmAdapter(list,this )*/
     }
 
-
+    override fun onPause() {
+        super.onPause()
+        viewModel?.liveListOfSettings?.value?.let {
+            println("liveListOfSettings $it")
+            viewModel!!.alarmsUtility.saveAlarmsToJson(it)
+        }
+    }
     override fun onDestroyView() {
+        viewModel?.liveListOfSettings?.value?.let {
+            println("liveListOfSettings $it")
+            viewModel!!.alarmsUtility.saveAlarmsToJson(it)
+        }
         super.onDestroyView()
         _binding = null
     }
