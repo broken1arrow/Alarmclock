@@ -42,5 +42,6 @@
     <string name="alarm_time_with_placeholders">%1$s:%2$s</string>
     <string name="alarm_notifcation">Alarm</string>
     <string name="text_notification">Snooze or turn of the alarm set.</string>
+    <string name="snooze_time">Snooze time</string>
 
 </resources>

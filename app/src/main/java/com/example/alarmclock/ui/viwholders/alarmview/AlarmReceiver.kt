@@ -14,6 +14,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.core.app.NotificationCompat
 import com.example.alarmclock.data.AlarmsUtility
+import com.example.alarmclock.settings.SettingsUtility
 import com.example.alarmclock.ui.viwholders.alarmview.cache.AlarmSettings
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -36,10 +37,17 @@ class AlarmReceiver : BroadcastReceiver() {
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(NOTIFICATION_ID)
+            val alarm = currentAlarmList!!.find { it.id == alarmId }
+            val snoozeTime = if (alarm == null || alarm.snoozeTime == -1L) {
+                val settingsUtility = SettingsUtility(context)
+                settingsUtility.getSettingFromJson().snoozeTime
+            } else {
+                alarm.snoozeTime
+            }
             handler.postDelayed({
                 playSound(context)
                 setNotification(context, snoozePendingAction, turnOffPendingAction)
-            }, 1000 * 30)
+            }, 1000 * snoozeTime)
             return
         }
         if (intent.action.equals("TURN_OFF_ACTION")) {

@@ -92,7 +92,7 @@ class SetAlarmTime(private val view: TextView, alarmViewMenu: AlarmViewMenu) {
             }
         }
 
-        binding.setTime.setOnClickListener {
+        binding.applayTime.setOnClickListener {
             if (hour >= 0 && minute >= 0) {
                 var hourFormatted = hour.toString()
                 var minuteFormatted = minute.toString()

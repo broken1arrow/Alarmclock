@@ -12,6 +12,7 @@ import com.example.alarmclock.ui.viwholders.alarmview.AlarmViewMenu
 import com.example.alarmclock.ui.viwholders.alarmview.Calender
 import com.example.alarmclock.ui.viwholders.alarmview.Mode
 import com.example.alarmclock.ui.viwholders.alarmview.SetAlarmTime
+import com.example.alarmclock.ui.viwholders.alarmview.SetSnoozeTime
 import com.example.alarmclock.utility.CustomImageButton
 import com.example.alarmclock.utility.Days
 import com.example.alarmclock.utility.RegisterAlarm
@@ -36,11 +37,13 @@ class OnAlarmClick(
         onSetAlarmSoundClick()
 
         onSetDeleteClick()
+        onSetSnoozeTime()
     }
 
     fun onSetExpandClick() {
-        menuBinding.expandedView.visibility =
-            if (alarmSettings.expand != Mode.NORMAL) View.VISIBLE else View.GONE
+        menuBinding.expandedView.visibility = View.GONE
+        alarmSettings.expand = Mode.NORMAL
+        // if (alarmSettings.expand != Mode.NORMAL) View.VISIBLE else View.GONE
         menuBinding.toggleExtendedView.setOnClickListener {
             if (alarmSettings.expand == Mode.EXTENDED) menuBinding.toggleExtendedView.setImageResource(
                 R.drawable.ic_down_arrow
@@ -49,15 +52,17 @@ class OnAlarmClick(
 
             alarmSettings.expand =
                 if (alarmSettings.expand == Mode.NORMAL) Mode.EXTENDED else Mode.NORMAL
-            alarmViewMenu.updateMenu(position);
+            menuBinding.expandedView.visibility =
+                if (alarmSettings.expand != Mode.NORMAL) View.VISIBLE else View.GONE
+            // alarmViewMenu.updateMenu(position);
         }
     }
 
     fun onSetTimeClick() {
         menuBinding.alarmTime.text =
-            if (alarmSettings.time != null)
-                alarmSettings.time!!.hour.toString() + ":" + alarmSettings.time!!.minute.toString()
-            else getString(menuBinding.alarmTime.context, R.string.time_default)
+            if (alarmSettings.time != null) {
+                setTime()
+            } else getString(menuBinding.alarmTime.context, R.string.time_default)
 
         menuBinding.alarmTime.setOnClickListener {
             val setAlarmTime = SetAlarmTime(menuBinding.alarmTime, alarmViewMenu)
@@ -66,6 +71,7 @@ class OnAlarmClick(
             setAlarmTime.onIntegration(alarmSettings)
         }
     }
+
 
     fun onSetSwitchClick() {
         menuBinding.switch1.isChecked = alarmSettings.alarmOn
@@ -146,6 +152,19 @@ class OnAlarmClick(
         }
     }
 
+    fun onSetSnoozeTime() {
+        if (alarmSettings.snoozeTime > 0)
+            menuBinding.snoozeTime.text = menuBinding.snoozeTime.context
+                .getString(R.string.snooze_set, formatSnoozeTime(alarmSettings.snoozeTime))
+
+        menuBinding.snoozeTime.setOnClickListener {
+            var snoozeTime = SetSnoozeTime(menuBinding.snoozeTime, alarmViewMenu)
+            snoozeTime.showPopup(it)
+            snoozeTime.onIntegration(alarmSettings)
+        }
+
+    }
+
     private fun createImageButton(
         dayList: TableRow, day: Days, buttonParams: TableRow.LayoutParams, tableRow: TableRow
     ): Pair<ImageButton, CustomImageButton> {
@@ -175,7 +194,59 @@ class OnAlarmClick(
         if (builder.isNotEmpty())
             menuBinding.scheduledAlarms.text = builder
         else {
-            menuBinding.scheduledAlarms.text = builder.append(context.getString(R.string.no_alarm_scheduled))
+            menuBinding.scheduledAlarms.text =
+                builder.append(context.getString(R.string.no_alarm_scheduled))
         }
     }
+
+    private fun setTime(): String {
+        val hour = alarmSettings.time!!.hour
+        val minute = alarmSettings.time!!.minute
+        var hourFormatted = hour.toString()
+        var minuteFormatted = minute.toString()
+        if (hour < 10)
+            hourFormatted = "0$hourFormatted"
+        if (minute < 10)
+            minuteFormatted = "0$minuteFormatted"
+        return menuBinding.alarmTime.context.getString(
+            R.string.alarm_time_with_placeholders,
+            hourFormatted,
+            minuteFormatted
+        )
+    }
+
+    private fun formatSnoozeTime(seconds: Long): String {
+        val hours = seconds / 3600
+        val remainingSeconds = seconds % 3600
+        val minutes = remainingSeconds / 60
+        val secs = remainingSeconds % 60
+
+        val formattedTime = StringBuilder()
+
+        if (hours > 0) {
+            if (hours < 10)
+                formattedTime.append(String.format("%01d", hours))
+            else
+                formattedTime.append(String.format("%02d", hours))
+            formattedTime.append(" hours ")
+        }
+
+        if (minutes > 0 || hours > 0) {
+            if (minutes < 10)
+                formattedTime.append(String.format("%01d", minutes))
+            else
+                formattedTime.append(String.format("%02d", minutes))
+            formattedTime.append(" min ")
+        }
+        if (secs > 0) {
+            if (secs < 10)
+                formattedTime.append(String.format("%01d", secs))
+            else
+                formattedTime.append(String.format("%02d", secs))
+            formattedTime.append(" sec")
+        }
+
+        return formattedTime.toString()
+    }
+
 }

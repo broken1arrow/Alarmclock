@@ -1,7 +1,6 @@
 package com.example.alarmclock.ui.viwholders.alarmview
 
 import android.content.res.ColorStateList
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +16,11 @@ import com.example.alarmclock.databinding.CalenderPopupMenuBinding
 import com.google.android.material.button.MaterialButton
 import org.threeten.bp.LocalDate
 
-class Calender(private val button: MaterialButton,  alarmViewMenu: AlarmViewMenu) {
+class Calender(private val button: MaterialButton, alarmViewMenu: AlarmViewMenu) {
     private val fragment: Fragment = alarmViewMenu.homeFragment()
 
     val binding: CalenderPopupMenuBinding = CalenderPopupMenuBinding.inflate(
-        LayoutInflater.from(button.context),  fragment.requireView() as ViewGroup?, false
+        LayoutInflater.from(button.context), fragment.requireView() as ViewGroup?, false
     )
 
     private val popupWindow: PopupWindow = PopupWindow(
@@ -52,11 +51,10 @@ class Calender(private val button: MaterialButton,  alarmViewMenu: AlarmViewMenu
         popupWindow.dismiss()
     }
 
-    fun onIntegration(alarmSettings: AlarmSettings){
-        val isTextChangeByCode = false
+    fun onIntegration(alarmSettings: AlarmSettings) {
         var date: LocalDate? = null
         binding.typeDateManually.doOnTextChanged { text, start, before, count ->
-            date = formatDateFromString(isTextChangeByCode, text, date)
+            date = formatDateFromString(text, date)
         }
         binding.calendarView.setOnDateChangeListener { viwe, year, month, dayOfMonth ->
             val selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
@@ -65,46 +63,41 @@ class Calender(private val button: MaterialButton,  alarmViewMenu: AlarmViewMenu
         binding.setDate.setOnClickListener {
             if (date != null) {
                 alarmSettings.date = date as LocalDate
-                    val formatter = org.threeten.bp.format.DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
-                    val formattedDate = alarmSettings.date!!.format(formatter)
+                val formatter = org.threeten.bp.format.DateTimeFormatter.ofPattern("dd-MMMM-yyyy")
+                val formattedDate = alarmSettings.date!!.format(formatter)
                 button.text = formattedDate
             }
             closePopup()
         }
-        binding.cancelButtonDate.setOnClickListener{
+        binding.cancelButtonDate.setOnClickListener {
             closePopup()
         }
     }
 
     private fun formatDateFromString(
-        isTextChangeByCode: Boolean,
         text: CharSequence?,
         date: LocalDate?
     ): LocalDate? {
-        var isTextChangeByCode1 = isTextChangeByCode
         var date1 = date
-        if (!isTextChangeByCode1) {
-            val buildText = text?.let { StringBuilder(it) }
-            if (text != null) {
-                if (text.length == 4)
-                    buildText?.append("-")
-                if (text.length == 7)
-                    buildText?.append("-")
-                if (text.length == 4 || text.length == 7) {
-                    isTextChangeByCode1 = true
-                    binding.typeDateManually.setText(buildText)
-                    binding.typeDateManually.setSelection(buildText?.length ?: 0)
-                    isTextChangeByCode1 = false
-                }
+        val buildText = text?.let { StringBuilder(it) }
+        if (text != null) {
+            if (text.length == 4)
+                buildText?.append("-")
+            if (text.length == 7)
+                buildText?.append("-")
+            if (text.length == 4 || text.length == 7) {
+                binding.typeDateManually.setText(buildText)
+                binding.typeDateManually.setSelection(buildText?.length ?: 0)
             }
         }
+
         if (text?.length == 10) {
             val splitText = text.split("-")
             if (splitText.isNotEmpty()) {
-                date1 = LocalDate.of(splitText[0].toInt(), splitText[1].toInt(), splitText[2].toInt())
+                date1 =
+                    LocalDate.of(splitText[0].toInt(), splitText[1].toInt(), splitText[2].toInt())
             }
         }
         return date1
     }
-
 }
