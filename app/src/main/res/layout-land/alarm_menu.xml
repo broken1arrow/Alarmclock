@@ -35,9 +35,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_down_arrow" />
 
-       <androidx.appcompat.widget.SwitchCompat
+        <Switch
             android:id="@+id/switch1"
-            android:layout_width="48dp"
+            android:layout_width="50dp"
             android:layout_height="48dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="10dp"

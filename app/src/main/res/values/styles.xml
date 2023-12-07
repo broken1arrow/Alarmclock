@@ -38,13 +38,13 @@
         <item name="backgroundTint">@color/background</item>
     </style>
 
-<!--    <style name="switch_item_alarm" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+      <style name="switch_item_alarm" parent="android:style/Widget.Material.Light.CompoundButton.Switch">
         <item name="android:backgroundTint">@color/background</item>
         <item name="android:thumb">@drawable/custom_switch_thumb</item>
         <item name="android:track">@drawable/custom_switch_track</item>
         <item name="android:thumbTint">@color/switch_track_thumb_color_state</item>
         <item name="android:trackTint">@color/switch_track_color_state</item>
-    </style>-->
+    </style>
 
     <style name="toolbar" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/toolbar_background</item>

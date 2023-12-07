@@ -33,15 +33,22 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_down_arrow" />
 
-        <androidx.appcompat.widget.SwitchCompat
+   <!--     <Switch
+            android:id="@+id/switch3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Switch" />-->
+
+
+        <Switch
             android:id="@+id/switch1"
-            android:layout_width="48dp"
+            android:layout_width="50dp"
             android:layout_height="48dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toggle_extended_view"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/toggle_extended_view" />
+
 
         <TextView
             android:id="@+id/scheduled_alarms"
