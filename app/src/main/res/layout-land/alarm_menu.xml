@@ -6,6 +6,7 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+
         android:id="@+id/constraintLayout"
         android:layout_width="398dp"
         android:layout_height="395dp"
@@ -34,19 +35,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_down_arrow" />
 
-        <Switch
+       <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch1"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="10dp"
-            android:thumb="@drawable/custom_switch_thumb"
-            android:track="@drawable/custom_switch_track"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toggle_extended_view"
-            app:thumbTint="@color/switch_track_thumb_color_state"
-            app:trackTint="@color/switch_track_color_state"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            app:layout_constraintTop_toBottomOf="@+id/toggle_extended_view" />
 
         <TextView
             android:id="@+id/scheduled_alarms"
@@ -161,9 +157,9 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:backgroundTintMode="src_atop"
-                    android:drawableLeft="@android:drawable/ic_popup_reminder"
                     android:gravity="start|center_vertical"
                     android:text="@string/snooze_time"
+                    android:drawableLeft="@android:drawable/ic_popup_reminder"
                     android:textColor="#0C0B0B"
                     app:layout_constraintBottom_toTopOf="@+id/remove_alarm"
                     app:layout_constraintEnd_toEndOf="parent"

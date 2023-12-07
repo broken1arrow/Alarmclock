@@ -74,8 +74,8 @@ class OnAlarmClick(
 
 
     fun onSetSwitchClick() {
-        menuBinding.switch1.isChecked = alarmSettings.alarmOn
-        menuBinding.switch1.setOnClickListener {
+        menuBinding.switch1?.isChecked = alarmSettings.alarmOn
+        menuBinding.switch1?.setOnClickListener {
             alarmSettings.alarmOn = menuBinding.switch1.isChecked
             val register = RegisterAlarm(menuBinding.switch1.context)
             register.rescheduleAlarm(alarmSettings)

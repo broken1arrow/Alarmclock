@@ -37,8 +37,8 @@
     <string name="select_time">Select time</string>
     <string name="set_time_hour">set hour</string>
     <string name="set_minute">set minutes</string>
-    <string name="set_selected_alarm_time">ok</string>
-    <string name="cancel_selected_alarm_time">cancel</string>
+    <string name="set_selected_alarm_time">OK</string>
+    <string name="cancel_selected_alarm_time">Cancel</string>
     <string name="alarm_time_with_placeholders">%1$s:%2$s</string>
     <string name="alarm_notifcation">Alarm</string>
     <string name="text_notification">Snooze or turn of the alarm set.</string>

@@ -42,9 +42,16 @@
         <item name="colorOnCustomColor3Container">#97f0ff</item>
         <item name="harmonizeCustomColor3">true</item>
         <item name="colorPrimaryInverse">@color/md_theme_dark_inversePrimary</item>
+
+
         <item name="materialButtonStyle">@style/ButtonStyle</item>
-        <item name="materialSwitchStyle">@style/switch_item_alarm</item>
-        <item name="android:switchStyle">@style/switch_item_alarm</item>
+        <item name="android:button">@style/ButtonStyle</item>
+
+
+
+ <!--       <item name="materialSwitchStyle">@style/switch_item_alarm</item>
+        <item name="android:switchStyle">@style/switch_item_alarm</item>-->
+
         <item name="android:toolbarStyle">@style/toolbar</item>
         <item name="toolbarStyle">@style/toolbar</item>
         <item name="navigationViewStyle">@style/navigation_bottom</item>

@@ -17,13 +17,14 @@
         <item name="android:textSize">16sp</item>
     </style>
 
-    <style name="ButtonStyle" parent="Widget.Material3.Button">
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
         <item name="colorControlActivated">@color/button_base_default</item>
         <item name="colorControlNormal">@color/button_color_state</item>
         <item name="colorControlHighlight">@color/md_theme_light_shadow</item>
         <item name="android:background">@drawable/button_shape</item>
         <item name="backgroundTint">@color/button_color_state</item>
     </style>
+
 
     <style name="background_item_alarm">
         <item name="android:background">@drawable/background_round_corners</item>
@@ -37,13 +38,13 @@
         <item name="backgroundTint">@color/background</item>
     </style>
 
-    <style name="switch_item_alarm" parent="android:Widget.Material.CompoundButton.Switch">
+<!--    <style name="switch_item_alarm" parent="Widget.Material3.CompoundButton.MaterialSwitch">
         <item name="android:backgroundTint">@color/background</item>
         <item name="android:thumb">@drawable/custom_switch_thumb</item>
         <item name="android:track">@drawable/custom_switch_track</item>
         <item name="android:thumbTint">@color/switch_track_thumb_color_state</item>
         <item name="android:trackTint">@color/switch_track_color_state</item>
-    </style>
+    </style>-->
 
     <style name="toolbar" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/toolbar_background</item>
