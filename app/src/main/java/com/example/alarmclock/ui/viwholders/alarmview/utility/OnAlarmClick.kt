@@ -17,6 +17,8 @@ import com.example.alarmclock.utility.CustomImageButton
 import com.example.alarmclock.utility.Days
 import com.example.alarmclock.utility.RegisterAlarm
 import com.example.alarmclock.utility.Shake
+import org.threeten.bp.LocalTime
+import org.threeten.bp.ZoneId
 
 
 class OnAlarmClick(
@@ -74,10 +76,15 @@ class OnAlarmClick(
 
 
     fun onSetSwitchClick() {
-        menuBinding.switch1?.isChecked = alarmSettings.alarmOn
-        menuBinding.switch1?.setOnClickListener {
+        menuBinding.switch1.isChecked = alarmSettings.alarmOn
+        menuBinding.switch1.setOnClickListener {
             alarmSettings.alarmOn = menuBinding.switch1.isChecked
-            val register = RegisterAlarm(menuBinding.switch1.context)
+
+            if (alarmSettings.time == null)
+                alarmSettings.time = LocalTime.of(0,0)
+
+
+            val register = RegisterAlarm(menuBinding.switch1.context, menuBinding.switch1)
             register.rescheduleAlarm(alarmSettings)
         }
     }

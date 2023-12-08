@@ -15,6 +15,7 @@ import com.example.alarmclock.ui.viwholders.alarmview.cache.AlarmSettings
 import com.example.alarmclock.databinding.CalenderPopupMenuBinding
 import com.google.android.material.button.MaterialButton
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
 
 class Calender(private val button: MaterialButton, alarmViewMenu: AlarmViewMenu) {
     private val fragment: Fragment = alarmViewMenu.homeFragment()
@@ -72,6 +73,11 @@ class Calender(private val button: MaterialButton, alarmViewMenu: AlarmViewMenu)
         binding.cancelButtonDate.setOnClickListener {
             closePopup()
         }
+        binding.unsetDate.setOnClickListener {
+            alarmSettings.date = null
+            button.text = binding.unsetDate.context.getString(R.string.set_date_for_alarm)
+            closePopup()
+        }
     }
 
     private fun formatDateFromString(
@@ -95,7 +101,10 @@ class Calender(private val button: MaterialButton, alarmViewMenu: AlarmViewMenu)
             val splitText = text.split("-")
             if (splitText.isNotEmpty()) {
                 date1 =
-                    LocalDate.of(splitText[0].toInt(), splitText[1].toInt(), splitText[2].toInt())
+                    LocalDate.of(
+                        splitText[0].toInt(),
+                        splitText[1].toInt(),
+                        splitText[2].toInt())
             }
         }
         return date1

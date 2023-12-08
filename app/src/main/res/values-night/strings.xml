@@ -31,7 +31,7 @@
     <string name="su">su</string>
 
     <string name="set_date">Apply</string>
-    <string name="unset_date">Cancel</string>
+    <string name="unset_date">Unset date</string>
     <string name="add_alarm">dd alarm</string>
     <string name="alarm_time_spaze">:</string>
     <string name="select_time">Select time</string>
@@ -43,5 +43,6 @@
     <string name="alarm_notifcation">Alarm</string>
     <string name="text_notification">Snooze or turn of the alarm set.</string>
     <string name="snooze_time">Snooze time</string>
+    <string name="date_cancel">Cancel</string>
 
 </resources>
