@@ -19,7 +19,7 @@ import org.threeten.bp.temporal.TemporalAdjusters
 import java.util.Calendar
 import kotlin.math.abs
 
-class RegisterAlarm(private val context: Context, var rootView: View) {
+class RegisterAlarm(private val context: Context, private var rootView: View?) {
 
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private val zoneId: ZoneId = ZoneId.of("UTC")
@@ -35,11 +35,13 @@ class RegisterAlarm(private val context: Context, var rootView: View) {
 
     fun rescheduleAlarm(alarm: AlarmSettings) {
         // Check if the current day matches any of the specified days for the alarm
-        val isMatchingDay = containsDay(alarm, currentDay.dayOfWeek)
-
-        val datePlanToSet = LocalDateTime.of(alarm.date ?: currentDay.toLocalDate(),alarm.time ?: LocalTime.of(0,0))
+        val isMatchingDay = containsDay(alarm)
+        val dateTime = LocalDateTime.of(
+            alarm.date ?: currentDay.toLocalDate(),
+            alarm.time ?: LocalTime.of(0, 0)
+        )
         if (alarm.alarmOn && (isMatchingDay || (alarm.date != null && currentDay.isEqual(
-                datePlanToSet
+                dateTime
             )))
         ) {
             val alarmIntent = Intent(context, AlarmReceiver::class.java).let { intent ->
@@ -52,21 +54,19 @@ class RegisterAlarm(private val context: Context, var rootView: View) {
             val setDates: MutableList<LocalDateTime> = mutableListOf();
             if (alarm.days.isNotEmpty()) {
                 calculateNextAlarmTime(setDates, alarm)
-                println("nextAlarmTime $setDates")
-            } else if (alarm.date == null) {
-                val localDateTime = LocalDateTime.of(currentDay.toLocalDate(), alarm.time)
-                setCorrectDay(localDateTime, alarm)
-                setDates.add(localDateTime)
+            } else {
+                val dateSet = setCorrectDay(dateTime, alarm)
+                setDates.add(dateSet)
             }
 
             if (setDates.isNotEmpty()) {
                 val timeUntilAlarm = calculateTimeUntilAlarm(setDates.first())
                 val snackbarMessage =
                     "Alarm set for ${timeUntilAlarm.days} days, ${timeUntilAlarm.hours} hours, and ${timeUntilAlarm.minutes} minutes from now."
-                Snackbar.make(rootView, snackbarMessage, Snackbar.LENGTH_LONG).show()
+                rootView?.let { Snackbar.make(it, snackbarMessage, Snackbar.LENGTH_LONG).show() }
             }
             for (scheduledDateTime in setDates) {
-                val calendar = setDate(alarm, scheduledDateTime)
+                val calendar = setDate(scheduledDateTime)
                 setAlarmDate(isMatchingDay, calendar, alarmIntent)
             }
         }
@@ -102,12 +102,9 @@ class RegisterAlarm(private val context: Context, var rootView: View) {
     }
 
     private fun setDate(
-        alarm: AlarmSettings,
         scheduledDateTime: LocalDateTime
     ): Calendar {
         val calendar = Calendar.getInstance()
-
-        setCorrectDay(scheduledDateTime, alarm)
 
         calendar.timeInMillis =
             scheduledDateTime.atZone(zoneId).toInstant().toEpochMilli()
@@ -117,12 +114,16 @@ class RegisterAlarm(private val context: Context, var rootView: View) {
     private fun setCorrectDay(
         scheduledDateTime: LocalDateTime,
         alarm: AlarmSettings
-    ) {
-        if (currentDay.isBefore(scheduledDateTime) ||
-            (currentDay.isEqual(scheduledDateTime) && currentTime.isBefore(alarm.time))
+    ): LocalDateTime {
+        var newDateTime = scheduledDateTime
+        if (currentDay.isAfter(scheduledDateTime) ||
+            (currentDay.dayOfMonth == scheduledDateTime.dayOfMonth && alarm.time?.isBefore(
+                currentTime
+            ) == true)
         ) {
-            scheduledDateTime.plusDays(1)
+            newDateTime = scheduledDateTime.plusDays(1)
         }
+        return newDateTime
     }
 
     private fun calculateTimeUntilAlarm(scheduledDateTime: LocalDateTime): TimeUntilAlarm {
@@ -138,9 +139,8 @@ class RegisterAlarm(private val context: Context, var rootView: View) {
         val minutes: Long = if (scheduledDateTime.minute == 0) {
             (now.minute - (scheduledDateTime.minute + 60) % 60).toLong()
         } else {
-            ChronoUnit.MINUTES.between(now, scheduledDateTime)
+            (now.minute - (scheduledDateTime.minute) % 60).toLong()
         }
-
         return TimeUntilAlarm(abs(days), abs(hours), abs(minutes))
     }
 
@@ -156,16 +156,15 @@ class RegisterAlarm(private val context: Context, var rootView: View) {
                     currentDay.with(TemporalAdjusters.next(DayOfWeek.valueOf(nextAlarmDay.name)));
                 val day = LocalDateTime.of(setDate.toLocalDate(), alarmSetting.time)
 
-                setCorrectDay(day, alarmSetting)
-                setDates.add(day)
+                val dateSet = setCorrectDay(day, alarmSetting)
+                setDates.add(dateSet)
             }
         }
 
     }
 
     private fun containsDay(
-        alarm: AlarmSettings,
-        currentDayOfWeek: DayOfWeek
+        alarm: AlarmSettings
     ): Boolean {
         if (alarm.days.isEmpty() && alarm.date == null)
             return true

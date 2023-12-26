@@ -16,10 +16,9 @@ import androidx.core.app.NotificationCompat
 import com.example.alarmclock.data.AlarmsUtility
 import com.example.alarmclock.settings.SettingsUtility
 import com.example.alarmclock.ui.viwholders.alarmview.cache.AlarmSettings
+import com.example.alarmclock.utility.RegisterAlarm
 
 class AlarmReceiver : BroadcastReceiver() {
-    private val handler = Handler(Looper.getMainLooper())
-
     override fun onReceive(context: Context, intent: Intent) {
         println("alarm goo off")
         /*        // Inflate the menu
@@ -31,9 +30,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val alarmId = intent.getIntExtra("ALARM_ID", -1)
         val snoozePendingAction = snoozeAlarm(context)
         val turnOffPendingAction = turnOffAlarm(context)
-
         if (intent.action.equals("SNOOZE_ACTION")) {
-            ringtone?.stop()
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(NOTIFICATION_ID)
@@ -44,14 +41,15 @@ class AlarmReceiver : BroadcastReceiver() {
             } else {
                 alarm.snoozeTime
             }
+            stopAlarmSound(alarmId)
+
             handler.postDelayed({
-                playSound(context)
+                playSound(context, alarmId)
                 setNotification(context, snoozePendingAction, turnOffPendingAction)
             }, 1000 * snoozeTime)
             return
         }
         if (intent.action.equals("TURN_OFF_ACTION")) {
-            ringtone?.stop()
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(NOTIFICATION_ID)
@@ -60,21 +58,26 @@ class AlarmReceiver : BroadcastReceiver() {
                 if (!alarm?.days.isNullOrEmpty()) {
                     alarm?.alarmOn = false
                     alarmsUtility?.saveAlarmsToJson(currentAlarmList!!)
+                } else {
+                    val register = RegisterAlarm(context, null)
+                    if (alarm != null) {
+                        register.rescheduleAlarm(alarm)
+                    }
                 }
-                clearAlarm()
+                clearAlarm(alarmId)
             }
             return
         }
 
         if (currentAlarmList == null)
-            getAlarmList(context, alarmId)
+            getAlarmList(context)
         else {
-            clearAlarm()
-            getAlarmList(context, alarmId)
+            clearAlarm(alarmId)
+            getAlarmList(context)
         }
 
         setNotification(context, snoozePendingAction, turnOffPendingAction)
-        playSound(context)
+        playSound(context, alarmId)
     }
 
     private fun setNotification(
@@ -125,47 +128,71 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun turnOffAlarm(context: Context): PendingIntent? {
         val turnOffIntent = Intent(context, AlarmReceiver::class.java)
         turnOffIntent.action = "TURN_OFF_ACTION"
-
         return PendingIntent.getBroadcast(
             context, 0, turnOffIntent, PendingIntent.FLAG_IMMUTABLE
         )
     }
 
-    private fun playSound(context: Context) {
+    private fun playSound(context: Context, id: Int) {
         val notificationSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        ringtone = RingtoneManager.getRingtone(context, notificationSoundUri)
-        handler.postDelayed({
-            if (ringtone?.isPlaying == true)
-                return@postDelayed
-            ringtone?.play()
-        }, 50)
-        /*      handler.postDelayed({
-                  ringtone?.stop()
-              }, 20000)*/
+        val ringtone = RingtoneManager.getRingtone(context, notificationSoundUri)
+        if (ringtone != null) {
+            ringtones[id] = ringtone
+            val delayedRunnable = object : PlayRingtone(ringtone) {}
+            runnable = delayedRunnable
+            handler.postDelayed(delayedRunnable, 50)
+        }
     }
 
     private fun rescheduleAlarms(context: Context) {
     }
 
-    fun startAlarm(context: Context) {
-        playSound(context)
+    fun startAlarm(context: Context, alarmID: Int) {
+        playSound(context, alarmID)
 
     }
 
     companion object {
+        private val handler = Handler(Looper.getMainLooper())
+        private var runnable: Runnable? = null
+
         private const val CHANNEL_ID = "your_channel_id"
         private const val NOTIFICATION_ID = 1
-        private var ringtone: Ringtone? = null
+        private var ringtones: MutableMap<Int, Ringtone> = mutableMapOf()
         private var currentAlarmList: MutableList<AlarmSettings>? = null
         private var alarmsUtility: AlarmsUtility? = null
-        private fun getAlarmList(context: Context, alarmId: Int) {
+
+        private fun getAlarmList(context: Context) {
+
             alarmsUtility = AlarmsUtility(context)
             currentAlarmList = alarmsUtility!!.getAlarmsFromJson().toMutableList()
         }
 
-        private fun clearAlarm() {
+        private fun clearAlarm(alarmID: Int) {
+            clearAlarmSound(alarmID)
             alarmsUtility = null
             currentAlarmList = null
+            runnable?.let {
+                if (it is PlayRingtone) {
+                    it.stopRingtone()
+                }
+                handler.removeCallbacks(it)
+            }
+        }
+
+        private fun stopAlarmSound(id: Int) {
+            ringtones[id]?.let { ringtone ->
+                if (ringtone.isPlaying)
+                    ringtone.stop()
+            }
+        }
+
+        private fun clearAlarmSound(id: Int) {
+            ringtones[id]?.let { ringtone ->
+                if (ringtone.isPlaying)
+                    ringtone.stop()
+                ringtones.remove(id)
+            }
         }
     }
     /*        val snoozeIntent = Intent(context, xc::class.java)
@@ -191,4 +218,20 @@ class AlarmReceiver : BroadcastReceiver() {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(NOTIFICATION_ID, notification)*/
+
+
+    private open class PlayRingtone(private val ringtone: Ringtone) : Runnable {
+        override fun run() {
+            if (ringtone.isPlaying) {
+                return
+            }
+            ringtone.play()
+        }
+
+        fun stopRingtone() {
+            if (ringtone.isPlaying) {
+                ringtone.stop()
+            }
+        }
+    }
 }
