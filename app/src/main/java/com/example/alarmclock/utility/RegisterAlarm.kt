@@ -60,6 +60,7 @@ class RegisterAlarm(private val context: Context, private var rootView: View?) {
             }
 
             if (setDates.isNotEmpty()) {
+                setDates.sort()
                 val timeUntilAlarm = calculateTimeUntilAlarm(setDates.first())
                 val snackbarMessage =
                     "Alarm set for ${timeUntilAlarm.days} days, ${timeUntilAlarm.hours} hours, and ${timeUntilAlarm.minutes} minutes from now."
