@@ -118,7 +118,7 @@ class RegisterAlarm(private val context: Context, private var rootView: View?) {
         var newDateTime = scheduledDateTime
         if (currentDay.isAfter(scheduledDateTime) ||
             (currentDay.dayOfMonth == scheduledDateTime.dayOfMonth && alarm.time?.isBefore(
-                currentTime
+                scheduledDateTime.toLocalTime()
             ) == true)
         ) {
             newDateTime = scheduledDateTime.plusDays(1)
